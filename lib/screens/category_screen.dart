@@ -1,17 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:quizapp/constants/fonts.dart';
+import 'package:quizapp/controllers/category_controller.dart';
 import 'package:quizapp/screens/question_screen.dart';
 import '../colors.dart';
 
-class CategoryScreen extends StatefulWidget {
-  const CategoryScreen({Key? key}) : super(key: key);
+class CategoryScreen extends StatelessWidget {
+  final _categoryController = Get.put(CategoryController());
 
-  @override
-  State<CategoryScreen> createState() => _CategoryScreenState();
-}
-
-class _CategoryScreenState extends State<CategoryScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -63,31 +59,23 @@ class _CategoryScreenState extends State<CategoryScreen> {
   Padding _buildBody(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 50),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          _button(
-            text: "Ümumi",
-            onPressed: () {
-              Get.to(() => QuestionScreen(categoryId: 1));
-            },
-          ),
-          SizedBox(height: 20),
-          _button(
-            text: "Tarix",
-            onPressed: () {
-              Get.to(() => QuestionScreen(categoryId: 2));
-            },
-          ),
-          SizedBox(height: 20),
-          _button(
-            text: "Futbol",
-            onPressed: () {
-              Get.to(() => QuestionScreen(categoryId: 3));
-            },
-          ),
-        ],
+      child: Obx(
+        () => _categoryController.isLoading.value
+            ? Center(child: CircularProgressIndicator(color: Colors.white))
+            : Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  ..._categoryController.categories.map(
+                    (element) => _button(
+                      text: element.categoryName,
+                      onPressed: () {
+                        Get.to(() => QuestionScreen(categoryId: element.id));
+                      },
+                    ),
+                  ),
+                ],
+              ),
       ),
     );
   }

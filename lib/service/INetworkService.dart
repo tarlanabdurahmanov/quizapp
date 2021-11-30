@@ -7,12 +7,16 @@ abstract class INetworkService {
   final String getQuestionPath = INetworkServicePath.GET_QUESTION.rawValue;
   final String userAnswerPath = INetworkServicePath.USER_ANSWER.rawValue;
   final String timeOverPath = INetworkServicePath.TIME_OVER.rawValue;
+  final String getCategoriesPath = INetworkServicePath.GET_CATEGORIES.rawValue;
+  final String ratingPath = INetworkServicePath.RATING.rawValue;
 
   Future<dynamic> login(LoginRequestModel model);
   Future<dynamic> register(RegisterRequestModel model);
   Future<dynamic> getQuestion({int categoryId});
   Future<dynamic> userAnswer({int answerId});
   Future<dynamic> timeOver();
+  Future<dynamic> getCategories();
+  Future<dynamic> getRatings();
 }
 
 enum INetworkServicePath {
@@ -20,7 +24,9 @@ enum INetworkServicePath {
   REGISTER,
   GET_QUESTION,
   USER_ANSWER,
-  TIME_OVER
+  TIME_OVER,
+  GET_CATEGORIES,
+  RATING,
 }
 
 extension INetworkServicePathExtension on INetworkServicePath {
@@ -36,6 +42,10 @@ extension INetworkServicePathExtension on INetworkServicePath {
         return '/user-answer';
       case INetworkServicePath.TIME_OVER:
         return '/time-over';
+      case INetworkServicePath.GET_CATEGORIES:
+        return '/get-categories';
+      case INetworkServicePath.RATING:
+        return '/rating';
       default:
         return '/not-found';
     }

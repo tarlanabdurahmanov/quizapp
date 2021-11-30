@@ -1,11 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:quizapp/constants/fonts.dart';
 import 'package:quizapp/screens/category_screen.dart';
+import 'package:quizapp/screens/leaderboard_screen.dart';
 import '../colors.dart';
 
-class HomeScreen extends StatelessWidget {
-  const HomeScreen({Key? key}) : super(key: key);
+class HomeScreen extends StatefulWidget {
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  var storage = GetStorage();
+
+  var score = 0;
+
+  @override
+  void initState() {
+    score = storage.read("score") != null ? storage.read("score") : 0;
+
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -57,7 +73,7 @@ class HomeScreen extends StatelessWidget {
               ),
               SizedBox(width: 10),
               Text(
-                "0 XP",
+                "${score * 10} XP",
                 style: TextStyle(
                   fontSize: 17,
                   color: Color(0xFFfdf04d),
@@ -96,7 +112,12 @@ class HomeScreen extends StatelessWidget {
             },
           ),
           SizedBox(height: 20),
-          _button(text: "RANKING", onPressed: () {}),
+          _button(
+            text: "RANKING",
+            onPressed: () {
+              Get.to(() => LeaderBoardScreen());
+            },
+          ),
           SizedBox(height: 20),
           _button(text: "AYARLAR", onPressed: () {}),
         ],

@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:hive/hive.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:quizapp/constants/fonts.dart';
 import 'package:quizapp/core/controller/base_controller.dart';
 import 'package:quizapp/core/init/network/network_manager.dart';
@@ -16,7 +16,8 @@ import 'package:quizapp/service/INetworkService.dart';
 
 class QuestionController extends BaseController
     with SingleGetTickerProviderMixin {
-  var hiveDB = Hive.openBox("milyoncu");
+  // var hiveDB = Hive.openBox("milyoncu");
+  var storage = GetStorage();
 
   INetworkService _service = NetworkService(CoreDio());
 
@@ -32,6 +33,7 @@ class QuestionController extends BaseController
 
   RxInt answerId = 0.obs;
   RxInt wrongAnswerId = 0.obs;
+  RxInt changeScore = 0.obs;
 
   late Question question;
   var answers = <QuestionAnswer>[].obs;
@@ -79,6 +81,7 @@ class QuestionController extends BaseController
         question = response.question;
         answers.value = response.answers;
         answerId.value = 0;
+        ++changeScore.value;
       } else if (response is ErrorModel) {
         dynamic error = response.error;
         if (error['message'] != null) {
@@ -87,6 +90,7 @@ class QuestionController extends BaseController
           showSnacbar(message: error['message'].toString());
           errorMessage.value = error['message'].toString();
           score.value = error['common_score'];
+          storage.write("score", score.value);
         }
       }
     }
@@ -99,7 +103,7 @@ class QuestionController extends BaseController
       Get.dialog(
         AlertDialog(
           title: Text(
-            "Nəticə : ${score.value}",
+            "Nəticə : ${score.value * 10} XP",
             style: poppinsTextStyle(
               fontSize: 17,
               fontWeight: FontWeight.w600,
