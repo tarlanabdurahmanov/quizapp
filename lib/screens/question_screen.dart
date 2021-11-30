@@ -45,7 +45,7 @@ class QuestionScreen extends StatelessWidget {
           return ConstrainedBox(
             constraints: BoxConstraints(minHeight: constraints.maxHeight),
             child: IntrinsicHeight(
-              child: _questionSection(constraints),
+              child: _questionSection(context, constraints),
             ),
           );
         },
@@ -53,7 +53,7 @@ class QuestionScreen extends StatelessWidget {
     );
   }
 
-  Stack _questionSection(BoxConstraints constraints) {
+  Stack _questionSection(BuildContext context, BoxConstraints constraints) {
     return Stack(
       children: [
         Container(

@@ -1,11 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:quizapp/core/bindings/app_binding.dart';
+import 'package:quizapp/database/user.dart';
 import 'package:quizapp/screens/home_screen.dart';
 import 'package:quizapp/screens/login_screen.dart';
 import 'package:quizapp/uiwidgets/DismissFocusOverlay.dart';
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Hive.initFlutter();
+
+  Hive.registerAdapter(UserDataAdapter());
+
+  // await 
+  // Wakelock.enable();
   await GetStorage.init();
   var _storage = GetStorage();
   final _isLogin =
@@ -20,6 +30,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return DismissFocusOverlay(
       child: GetMaterialApp(
+        initialBinding: AppBinding(),
         debugShowCheckedModeBanner: false,
         title: 'Quiz App',
         home: isLogin ? HomeScreen() : LoginScreen(),

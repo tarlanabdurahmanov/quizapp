@@ -23,7 +23,7 @@ final Dio dio = new Dio(BaseOptions(
     return handler.next(response);
   }, onError: (DioError e, handler) {
     if (e.type == DioErrorType.other) {
-      NetworkController().initConnectivity(check: false);
+      NetworkController().initConnectivity(check: true);
     }
     return handler.next(e);
   }));

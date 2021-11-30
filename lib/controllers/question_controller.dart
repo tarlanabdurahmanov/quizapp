@@ -1,17 +1,23 @@
+import 'dart:async';
+
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:hive/hive.dart';
 import 'package:quizapp/constants/fonts.dart';
 import 'package:quizapp/core/controller/base_controller.dart';
 import 'package:quizapp/core/init/network/network_manager.dart';
 import 'package:quizapp/core/models/error_model.dart';
 import 'package:quizapp/models/QuestionResponseModel.dart';
+import 'package:quizapp/models/TimeOverResponseModel.dart';
 import 'package:quizapp/screens/home_screen.dart';
 import 'package:quizapp/service/NetworkService.dart';
 import 'package:quizapp/service/INetworkService.dart';
 
 class QuestionController extends BaseController
     with SingleGetTickerProviderMixin {
+  var hiveDB = Hive.openBox("milyoncu");
+
   INetworkService _service = NetworkService(CoreDio());
 
   AnimationController? _animationController;
@@ -34,7 +40,6 @@ class QuestionController extends BaseController
   var score = 0.obs;
   var questionPosition = 1.obs;
   var isQuestionLoading = false.obs;
-
   var errorMessage = "".obs;
 
   @override
@@ -45,7 +50,7 @@ class QuestionController extends BaseController
       ..addListener(() {
         update();
       });
-    _animationController!.forward().whenComplete(nextQuestion);
+    _animationController!.forward().whenComplete(whenComplete);
     super.onInit();
   }
 
@@ -66,7 +71,7 @@ class QuestionController extends BaseController
   }
 
   Future<void> checkAns(int id) async {
-    changeQuestionLoading();
+    isQuestionLoading.value = true;
     if (answerId.value == 0 && isQuestionLoading.value) {
       answerId.value = id;
       final response = await _service.userAnswer(answerId: answerId.value);
@@ -75,7 +80,6 @@ class QuestionController extends BaseController
         answers.value = response.answers;
         answerId.value = 0;
       } else if (response is ErrorModel) {
-        print("Response error ${response.error}");
         dynamic error = response.error;
         if (error['message'] != null) {
           wrongAnswerId.value = id;
@@ -118,20 +122,15 @@ class QuestionController extends BaseController
         ),
         barrierDismissible: false,
       );
-      // Get.offAll(() => HomeScreen());
     }
-    changeQuestionLoading();
-  }
-
-  changeQuestionLoading() {
-    isQuestionLoading.value = !isQuestionLoading.value;
+    isQuestionLoading.value = false;
   }
 
   void nextQuestion() {
     position = new Duration();
     duration = new Duration();
     _animationController!.reset();
-    _animationController!.forward().whenComplete(nextQuestion);
+    _animationController!.forward().whenComplete(whenComplete);
     update();
   }
 
@@ -164,6 +163,38 @@ class QuestionController extends BaseController
       }
     });
     update();
+  }
+
+  Future<void> whenComplete() async {
+    final response = await _service.timeOver();
+    if (response is TimeOverResponseModel) {
+      Get.dialog(
+        AlertDialog(
+          title: Text(
+            "Nəticə : ${response.success.commonScore}",
+            style: poppinsTextStyle(
+              fontSize: 17,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+          content: Text(
+            response.success.message.toString(),
+            style: poppinsTextStyle(
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Get.offAll(() => HomeScreen());
+              },
+              child: Text("Ana Səhifə"),
+            ),
+          ],
+        ),
+        barrierDismissible: false,
+      );
+    }
   }
 
   @override

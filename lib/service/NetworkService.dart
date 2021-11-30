@@ -4,6 +4,7 @@ import 'package:quizapp/models/LoginRequestModel.dart';
 import 'package:quizapp/models/AuthResponseModel.dart';
 import 'package:quizapp/models/QuestionResponseModel.dart';
 import 'package:quizapp/models/RegisterRequestModel.dart';
+import 'package:quizapp/models/TimeOverResponseModel.dart';
 import 'package:quizapp/service/INetworkService.dart';
 
 import '../../../../core/init/network/network_manager.dart';
@@ -51,6 +52,16 @@ class NetworkService extends INetworkService {
         await coreDio.post(userAnswerPath, {"answer_id": answerId});
     if (response.statusCode == HttpStatus.ok) {
       return QuestionResponseModel.fromJson(response.data['success']);
+    } else {
+      return ErrorModel.fromJson(response.data);
+    }
+  }
+
+  @override
+  Future timeOver() async {
+    final response = await coreDio.post(timeOverPath, {});
+    if (response.statusCode == HttpStatus.ok) {
+      return TimeOverResponseModel.fromJson(response.data);
     } else {
       return ErrorModel.fromJson(response.data);
     }

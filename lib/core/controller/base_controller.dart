@@ -9,10 +9,12 @@ class BaseController extends GetxController {
     required String message,
     IconData? icon,
     Color? iconColor,
+    int animationDuration = 1,
   }) {
     Get.showSnackbar(
       GetBar(
         message: message,
+        animationDuration: Duration(seconds: animationDuration),
         backgroundColor: color ?? Colors.red,
         duration: Duration(seconds: 3),
         icon: Icon(icon ?? FeatherIcons.alertCircle,
