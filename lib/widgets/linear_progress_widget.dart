@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 import '../colors.dart';
 
 class LinearProgressIndicatorWidget extends StatefulWidget {
-  const LinearProgressIndicatorWidget({Key? key, required this.second})
+  const LinearProgressIndicatorWidget(
+      {Key? key, required this.second, required this.animationController})
       : super(key: key);
   final int second;
-
+  final AnimationController animationController;
   @override
   State<LinearProgressIndicatorWidget> createState() =>
       _LinearProgressIndicatorWidgetState();
@@ -13,14 +14,14 @@ class LinearProgressIndicatorWidget extends StatefulWidget {
 
 class _LinearProgressIndicatorWidgetState
     extends State<LinearProgressIndicatorWidget> with TickerProviderStateMixin {
-  AnimationController? _animationController;
   Animation? animation;
 
   late final AnimationController _controller = AnimationController(
-    duration: const Duration(seconds: 3),
+    duration: const Duration(seconds: 60),
     vsync: this,
   )..forward();
 
+  // ignore: unused_field
   late final Animation<double> _animation = CurvedAnimation(
     parent: _controller,
     curve: Curves.easeIn,
@@ -28,14 +29,19 @@ class _LinearProgressIndicatorWidgetState
   @override
   void initState() {
     super.initState();
-    _animationController = AnimationController(
-        duration: Duration(seconds: widget.second), vsync: this);
-    animation = Tween<double>(begin: 0, end: 1).animate(_animationController!)
-      ..addListener(() {
-        setState(() {});
-      });
+    animation =
+        Tween<double>(begin: 0, end: 1).animate(widget.animationController)
+          ..addListener(() {
+            setState(() {});
+          });
 
-    _animationController!.forward();
+    // widget.animationController.forward();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
   }
 
   @override

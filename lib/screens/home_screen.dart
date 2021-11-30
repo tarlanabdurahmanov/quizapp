@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:quizapp/constants/fonts.dart';
+import 'package:quizapp/screens/category_screen.dart';
 import '../colors.dart';
-import 'quiz_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -55,7 +57,7 @@ class HomeScreen extends StatelessWidget {
               ),
               SizedBox(width: 10),
               Text(
-                "100 XP",
+                "0 XP",
                 style: TextStyle(
                   fontSize: 17,
                   color: Color(0xFFfdf04d),
@@ -68,8 +70,8 @@ class HomeScreen extends StatelessWidget {
             borderRadius: BorderRadius.circular(6),
             child: Image.network(
               "https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=930&q=80",
-              height: 60.0,
-              width: 60.0,
+              height: 50.0,
+              width: 50.0,
               fit: BoxFit.cover,
             ),
           ),
@@ -86,17 +88,17 @@ class HomeScreen extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           _logotext(),
-          SizedBox(height: 100),
+          SizedBox(height: 60),
           _button(
-              text: "PLAY",
-              onPressed: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => QuizScreen()));
-              }),
+            text: "OYNA",
+            onPressed: () {
+              Get.to(() => CategoryScreen());
+            },
+          ),
           SizedBox(height: 20),
           _button(text: "RANKING", onPressed: () {}),
           SizedBox(height: 20),
-          _button(text: "SETTINGS", onPressed: () {}),
+          _button(text: "AYARLAR", onPressed: () {}),
         ],
       ),
     );
@@ -115,10 +117,10 @@ class HomeScreen extends StatelessWidget {
       ),
       child: Text(
         text,
-        style: TextStyle(
-          fontWeight: FontWeight.bold,
-          fontSize: 22,
+        style: defaultTextStyle(
           color: Color(0xFF6b71df),
+          fontWeight: FontWeight.w600,
+          fontSize: 18,
         ),
       ),
     );
@@ -127,8 +129,8 @@ class HomeScreen extends StatelessWidget {
   Center _logotext() {
     return Center(
       child: Text(
-        "RANANGANAM",
-        style: TextStyle(
+        "Milyonçu",
+        style: propmtTextStyle(
           fontWeight: FontWeight.bold,
           fontSize: 30,
           color: Colors.white,
@@ -136,7 +138,4 @@ class HomeScreen extends StatelessWidget {
       ),
     );
   }
-
-
-
 }
