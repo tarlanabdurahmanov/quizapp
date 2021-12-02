@@ -3,7 +3,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:get/get.dart';
-import 'package:quizapp/colors.dart';
+import 'package:quizapp/constants/colors.dart';
 import 'package:quizapp/constants/fonts.dart';
 import 'package:quizapp/constants/size.dart';
 import 'package:quizapp/constants/strings.dart';
@@ -19,18 +19,17 @@ class LoginScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: false,
       backgroundColor: Colors.white,
-      body: LayoutBuilder(
-        builder: (BuildContext context, BoxConstraints constraints) {
-          return Padding(
+      body: Align(
+        alignment: Alignment.center,
+        child: SingleChildScrollView(
+          child: Padding(
             padding: EdgeInsets.all(20.0),
             child: Obx(
               () => Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  Spacer(),
                   Image.asset(logoPath),
                   Text(
                     "Hesabınıza daxil olun",
@@ -117,13 +116,13 @@ class LoginScreen extends StatelessWidget {
                   _loginBtn(),
                   sizedBoxHeight(height: 15),
                   _googleLoginBtn(),
-                  Spacer(),
+                  sizedBoxHeight(height: 30),
                   _bottomText(),
                 ],
               ),
             ),
-          );
-        },
+          ),
+        ),
       ),
     );
   }

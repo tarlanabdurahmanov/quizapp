@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:quizapp/core/controller/base_controller.dart';
 
 import '../../controller/network_controller.dart';
 import '../../enum/network_route_enum.dart';
@@ -9,7 +10,7 @@ final Dio dio = new Dio(BaseOptions(
     responseType: ResponseType.json,
     validateStatus: (_) => true))
   ..options.baseUrl = NetworkRoutes.BASE_URL_PROD_ONE.rawValue
-  ..options.connectTimeout = 150000
+  ..options.connectTimeout = 10000
   ..options.receiveTimeout
   ..options.headers = {
     "Accept": "application/json",
@@ -24,7 +25,10 @@ final Dio dio = new Dio(BaseOptions(
   }, onError: (DioError e, handler) {
     if (e.type == DioErrorType.other) {
       NetworkController().initConnectivity(check: true);
+    } else if (e.type == DioErrorType.connectTimeout) {
+      BaseController().showSnacbar(message: "İnternet bağlantınızı yoxlayın");
     }
+
     return handler.next(e);
   }));
 

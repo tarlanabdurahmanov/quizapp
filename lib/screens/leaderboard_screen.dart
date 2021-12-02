@@ -1,6 +1,7 @@
+import 'package:avatar_view/avatar_view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:quizapp/colors.dart';
+import 'package:quizapp/constants/colors.dart';
 import 'package:quizapp/constants/fonts.dart';
 import 'package:quizapp/constants/size.dart';
 import 'package:quizapp/constants/strings.dart';
@@ -33,12 +34,12 @@ class LeaderBoardScreen extends StatelessWidget {
               double textFontSize = 14;
               double xpFontSize = 12;
               double borderRadius = 27;
-              double leftPadding = 70;
+              // double leftPadding = 70;
               if (constraints.maxWidth > 375) {
                 textFontSize = 16;
                 xpFontSize = 13;
                 borderRadius = 27;
-                leftPadding = 80;
+                // leftPadding = 80;
               }
               return Obx(
                 () => Padding(
@@ -46,62 +47,87 @@ class LeaderBoardScreen extends StatelessWidget {
                   child: _leaderBoardController.isLoading.value
                       ? Center(
                           child: CircularProgressIndicator(color: Colors.white))
-                      : ListView.builder(
-                          itemCount: _leaderBoardController.ratings.length,
-                          itemBuilder: (context, index) {
-                            return Container(
-                              margin: const EdgeInsets.symmetric(
-                                  horizontal: 20, vertical: 5),
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 10, vertical: 10),
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(12),
-                              ),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  CircleAvatar(
-                                    radius: borderRadius,
-                                    backgroundImage: NetworkImage(userPath),
+                      : (_leaderBoardController.ratings.length > 0
+                          ? ListView.builder(
+                              itemCount: _leaderBoardController.ratings.length,
+                              itemBuilder: (context, index) {
+                                return Container(
+                                  margin: const EdgeInsets.symmetric(
+                                      horizontal: 20, vertical: 5),
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 10, vertical: 10),
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(12),
                                   ),
-                                  sizedBoxWidth(),
-                                  Expanded(
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          _leaderBoardController
-                                              .ratings[index].username!,
-                                          maxLines: 1,
-                                          overflow: TextOverflow.ellipsis,
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: textFontSize,
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      Obx(
+                                        () => AvatarView(
+                                          radius: borderRadius,
+                                          borderWidth: 1,
+                                          borderColor: context
+                                              .theme.colorScheme.background
+                                              .withOpacity(0.1),
+                                          avatarType: AvatarType.CIRCLE,
+                                          backgroundColor: Colors.red,
+                                          imagePath: _leaderBoardController
+                                                      .ratings[index]
+                                                      .profileImage !=
+                                                  null
+                                              ? "${_leaderBoardController.ratings[index].profileImage}"
+                                              : userDefaultPath,
+                                          placeHolder:
+                                              Image.asset(userDefaultPath),
+                                          errorWidget: Container(
+                                            child: Icon(
+                                              Icons.error,
+                                              size: 20,
+                                              color: Colors.red,
+                                            ),
                                           ),
                                         ),
-                                        SizedBox(height: 5),
-                                        Text(
-                                          "${_leaderBoardController.ratings[index].score!.toInt() * 10} XP",
-                                          style: defaultTextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: xpFontSize,
-                                            color: primaryColor,
-                                          ),
+                                      ),
+                                      sizedBoxWidth(),
+                                      Expanded(
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              _leaderBoardController
+                                                  .ratings[index].username!,
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: textFontSize,
+                                              ),
+                                            ),
+                                            SizedBox(height: 5),
+                                            Text(
+                                              "${_leaderBoardController.ratings[index].score!.toInt() * 10} XP",
+                                              style: defaultTextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: xpFontSize,
+                                                color: primaryColor,
+                                              ),
+                                            ),
+                                          ],
                                         ),
-                                      ],
-                                    ),
+                                      ),
+                                      SizedBox(width: 15),
+                                      _leaderIcon(index: index + 1)
+                                    ],
                                   ),
-                                  SizedBox(width: 15),
-                                  _leaderIcon(index: index + 1)
-                                ],
-                              ),
-                            );
-                          },
-                        ),
+                                );
+                              },
+                            )
+                          : Text("Məlumat tapılmadı")),
                 ),
               );
             },

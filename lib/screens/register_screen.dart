@@ -3,7 +3,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:get/get.dart';
-import 'package:quizapp/colors.dart';
+import 'package:quizapp/constants/colors.dart';
 import 'package:quizapp/constants/fonts.dart';
 import 'package:quizapp/constants/size.dart';
 import 'package:quizapp/constants/strings.dart';
@@ -19,91 +19,96 @@ class RegisterScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      resizeToAvoidBottomInset: false,
-      body: Padding(
-        padding: EdgeInsets.all(20.0),
-        child: Obx(
-          () => Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Spacer(),
-              Image.asset(logoPath),
-              Text(
-                "Hesab yaradın",
-                style: propmtTextStyle(
-                  fontWeight: FontWeight.w600,
-                  fontSize: 20,
-                ),
-              ),
-              sizedBoxHeight(height: 20),
-              _emailFormField(),
-              sizedBoxHeight(height: 20),
-              _usernameFormField(),
-              sizedBoxHeight(height: 20),
-              _passwordFormField(),
-              sizedBoxHeight(height: 15),
-              Text(
-                "Şifrəni unutmusunuz?",
-                style: propmtTextStyle(
-                    color: primaryColor, fontWeight: FontWeight.w600),
-              ),
-              sizedBoxHeight(height: 15),
-              CustomButton(
-                text: "Qeydiyyat",
-                onPressed: () {
-                  _registerController.register();
-                },
-                fontSize: 17,
-                color: primaryColor,
-                textColor: Colors.white,
-              ),
-              sizedBoxHeight(height: 15),
-              CustomOutlineButton(
-                onPressed: () {},
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Image.asset(googleLogoPath, width: 25, height: 25),
-                    Text(
-                      "Google ilə qeydiyyat",
-                      style: propmtTextStyle(
-                        fontFamily: nunitoFont,
-                        fontWeight: FontWeight.w600,
-                        fontSize: 16,
-                      ),
-                    ),
-                    sizedBoxWidth(width: 20),
-                  ],
-                ),
-              ),
-              Spacer(),
-              Row(
+      body: Align(
+        alignment: Alignment.center,
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: EdgeInsets.all(20.0),
+            child: Obx(
+              () => Column(
                 mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
+                  Image.asset(logoPath),
                   Text(
-                    "Artıq bir hesabınız var mı?",
+                    "Hesab yaradın",
                     style: propmtTextStyle(
                       fontWeight: FontWeight.w600,
+                      fontSize: 20,
                     ),
                   ),
-                  sizedBoxWidth(width: 5),
-                  GestureDetector(
-                    onTap: () {
-                      Get.offAll(() => LoginScreen());
+                  sizedBoxHeight(height: 20),
+                  _nameFormField(),
+                  sizedBoxHeight(height: 20),
+                  _usernameFormField(),
+                  sizedBoxHeight(height: 20),
+                  _emailFormField(),
+                  sizedBoxHeight(height: 20),
+                  _passwordFormField(),
+                  sizedBoxHeight(height: 15),
+                  Text(
+                    "Şifrəni unutmusunuz?",
+                    style: propmtTextStyle(
+                        color: primaryColor, fontWeight: FontWeight.w600),
+                  ),
+                  sizedBoxHeight(height: 15),
+                  CustomButton(
+                    text: "Qeydiyyat",
+                    onPressed: () {
+                      _registerController.register();
                     },
-                    child: Text(
-                      "Daxil ol",
-                      style: propmtTextStyle(
-                        color: primaryColor,
-                        fontWeight: FontWeight.w600,
-                        fontSize: 17,
-                      ),
+                    fontSize: 17,
+                    color: primaryColor,
+                    textColor: Colors.white,
+                  ),
+                  sizedBoxHeight(height: 15),
+                  CustomOutlineButton(
+                    onPressed: () {},
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Image.asset(googleLogoPath, width: 25, height: 25),
+                        Text(
+                          "Google ilə qeydiyyat",
+                          style: propmtTextStyle(
+                            fontFamily: nunitoFont,
+                            fontWeight: FontWeight.w600,
+                            fontSize: 16,
+                          ),
+                        ),
+                        sizedBoxWidth(width: 20),
+                      ],
                     ),
+                  ),
+                  sizedBoxHeight(height: 30),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        "Artıq bir hesabınız var mı?",
+                        style: propmtTextStyle(
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      sizedBoxWidth(width: 5),
+                      GestureDetector(
+                        onTap: () {
+                          Get.offAll(() => LoginScreen());
+                        },
+                        child: Text(
+                          "Daxil ol",
+                          style: propmtTextStyle(
+                            color: primaryColor,
+                            fontWeight: FontWeight.w600,
+                            fontSize: 17,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),
-            ],
+            ),
           ),
         ),
       ),
@@ -239,6 +244,38 @@ class RegisterScreen extends StatelessWidget {
               color: _registerController.isUsernameError.value
                   ? Colors.red
                   : Colors.transparent),
+          borderRadius: BorderRadius.circular(10),
+        ),
+        prefixIcon: Icon(FeatherIcons.user, color: Color(0xFF9ba5b0)),
+      ),
+    );
+  }
+
+  TextFormField _nameFormField() {
+    return TextFormField(
+      controller: _registerController.name,
+      cursorColor: Colors.black,
+      style: poppinsTextStyle(fontWeight: FontWeight.w600),
+      decoration: InputDecoration(
+        filled: true,
+        fillColor: fillColor,
+        hintText: "Ad soyad",
+        contentPadding: EdgeInsets.all(0),
+        hintStyle: propmtTextStyle(color: Color(0xFF9ba5b0)),
+        border: OutlineInputBorder(
+          borderSide: BorderSide(width: 1, color: Colors.transparent),
+          borderRadius: BorderRadius.circular(10),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderSide: BorderSide(width: 1, color: Colors.transparent),
+          borderRadius: BorderRadius.circular(10),
+        ),
+        errorBorder: OutlineInputBorder(
+          borderSide: BorderSide(width: 1, color: Colors.red),
+          borderRadius: BorderRadius.circular(10),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderSide: BorderSide(width: 1, color: Colors.transparent),
           borderRadius: BorderRadius.circular(10),
         ),
         prefixIcon: Icon(FeatherIcons.user, color: Color(0xFF9ba5b0)),

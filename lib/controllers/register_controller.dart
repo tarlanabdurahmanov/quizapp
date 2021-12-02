@@ -14,6 +14,7 @@ import '../core/init/network/network_manager.dart';
 class RegisterController extends BaseController {
   INetworkService _service = NetworkService(CoreDio());
 
+  TextEditingController name = TextEditingController();
   TextEditingController username = TextEditingController();
   TextEditingController email = TextEditingController();
   TextEditingController password = TextEditingController();
@@ -34,6 +35,7 @@ class RegisterController extends BaseController {
     try {
       final response = await _service.register(
         RegisterRequestModel(
+          name: name.text.trim(),
           username: username.text.trim(),
           email: email.text.trim(),
           password: password.text.trim(),

@@ -6,10 +6,10 @@ import 'package:flutter/services.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:quizapp/colors.dart';
+import 'package:quizapp/constants/colors.dart';
 import 'package:quizapp/core/controller/base_controller.dart';
 import 'package:quizapp/screens/home_screen.dart';
-import 'package:quizapp/uiwidgets/CustromButton.dart';
+import 'package:quizapp/widgets/custom_button_widget.dart';
 import 'package:quizapp/widgets/no_internet.dart';
 
 class NetworkController extends BaseController {
@@ -56,7 +56,7 @@ class NetworkController extends BaseController {
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              CustomButton(
+              CustomButtonWidget(
                 widget: Text('Tamam'),
                 color: primaryColor,
                 onPressed: () {

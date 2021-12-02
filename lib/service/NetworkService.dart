@@ -7,6 +7,7 @@ import 'package:quizapp/models/QuestionResponseModel.dart';
 import 'package:quizapp/models/RatingResponseModel.dart';
 import 'package:quizapp/models/RegisterRequestModel.dart';
 import 'package:quizapp/models/TimeOverResponseModel.dart';
+import 'package:quizapp/models/UserResponseModel.dart';
 import 'package:quizapp/service/INetworkService.dart';
 
 import '../../../../core/init/network/network_manager.dart';
@@ -81,13 +82,34 @@ class NetworkService extends INetworkService {
   }
 
   @override
-  Future getRatings() async {
+  Future getRatings(int categoryId) async {
     final response = await coreDio.post(ratingPath, {
-      "category_id": 1,
+      "category_id": categoryId,
     });
     print(response);
     if (response.statusCode == HttpStatus.ok) {
       return RatingResponseModel.fromJson(response.data['success']);
+    } else {
+      return ErrorModel.fromJson(response.data);
+    }
+  }
+
+  @override
+  Future userInformation() async {
+    final response = await coreDio.post(userInformationPath, {});
+    if (response.statusCode == HttpStatus.ok) {
+      return UserResponseModel.fromJson(response.data['success']);
+    } else {
+      return ErrorModel.fromJson(response.data);
+    }
+  }
+
+  @override
+  Future editProfile(data) async {
+    final response = await coreDio.post(editProfilePath, data);
+    print("Response -> $response");
+    if (response.statusCode == HttpStatus.ok) {
+      return response.data['success'];
     } else {
       return ErrorModel.fromJson(response.data);
     }

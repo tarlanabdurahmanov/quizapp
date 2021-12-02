@@ -13,6 +13,8 @@ class CustomTextFormField extends StatelessWidget {
   final String? Function(String?)? validator;
   final TextEditingController controller;
 
+  final VoidCallback? onTap;
+
   const CustomTextFormField(
       {Key? key,
       required this.hintText,
@@ -24,12 +26,14 @@ class CustomTextFormField extends StatelessWidget {
       this.validator,
       required this.controller,
       this.obscureText = false,
-      this.suffixIcon})
+      this.suffixIcon,
+      this.onTap})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      onTap: onTap,
       obscureText: obscureText,
       validator: validator,
       onChanged: onChanged,

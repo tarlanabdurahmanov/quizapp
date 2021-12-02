@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:quizapp/constants/fonts.dart';
-import 'package:quizapp/uiwidgets/CustromProgressIndicator.dart';
+import 'package:quizapp/widgets/custrom_progress_indicator.dart';
 
 class CustomButton extends StatelessWidget {
   final String text;

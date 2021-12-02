@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:quizapp/constants/colors.dart';
 import 'package:quizapp/core/bindings/app_binding.dart';
 import 'package:quizapp/screens/home_screen.dart';
 import 'package:quizapp/screens/login_screen.dart';
-import 'package:quizapp/uiwidgets/DismissFocusOverlay.dart';
+import 'package:quizapp/widgets/dismiss_focus_overlay.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

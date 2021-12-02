@@ -1,28 +1,16 @@
+import 'package:avatar_view/avatar_view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
 import 'package:quizapp/constants/fonts.dart';
+import 'package:quizapp/constants/strings.dart';
+import 'package:quizapp/controllers/home_controller.dart';
 import 'package:quizapp/screens/category_screen.dart';
 import 'package:quizapp/screens/leaderboard_screen.dart';
-import '../colors.dart';
+import 'package:quizapp/screens/profile_screen.dart';
+import '../constants/colors.dart';
 
-class HomeScreen extends StatefulWidget {
-  @override
-  State<HomeScreen> createState() => _HomeScreenState();
-}
-
-class _HomeScreenState extends State<HomeScreen> {
-  var storage = GetStorage();
-
-  var score = 0;
-
-  @override
-  void initState() {
-    score = storage.read("score") != null ? storage.read("score") : 0;
-
-    super.initState();
-  }
-
+class HomeScreen extends StatelessWidget {
+  final _homeController = Get.put(HomeController());
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -72,25 +60,37 @@ class _HomeScreenState extends State<HomeScreen> {
                 width: 40,
               ),
               SizedBox(width: 10),
-              Text(
-                "${score * 10} XP",
-                style: TextStyle(
-                  fontSize: 17,
-                  color: Color(0xFFfdf04d),
-                  fontWeight: FontWeight.bold,
+              Obx(
+                () => Text(
+                  "${_homeController.score.value * 10} XP",
+                  style: TextStyle(
+                    fontSize: 17,
+                    color: Color(0xFFfdf04d),
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               )
             ],
           ),
-          ClipRRect(
-            borderRadius: BorderRadius.circular(6),
-            child: Image.network(
-              "https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=930&q=80",
-              height: 50.0,
-              width: 50.0,
-              fit: BoxFit.cover,
+          Obx(
+            () => AvatarView(
+              radius: 25,
+              borderWidth: 1,
+              avatarType: AvatarType.CIRCLE,
+              backgroundColor: Colors.red,
+              imagePath: _homeController.profileImage.value != ""
+                  ? "${_homeController.profileImage.value}"
+                  : userDefaultPath,
+              placeHolder: Image.asset(userDefaultPath),
+              errorWidget: Container(
+                child: Icon(
+                  Icons.error,
+                  size: 20,
+                  color: Colors.red,
+                ),
+              ),
             ),
-          ),
+          )
         ],
       ),
     );
@@ -119,7 +119,11 @@ class _HomeScreenState extends State<HomeScreen> {
             },
           ),
           SizedBox(height: 20),
-          _button(text: "AYARLAR", onPressed: () {}),
+          _button(
+              text: "AYARLAR",
+              onPressed: () {
+                Get.to(() => ProfileScreen());
+              }),
         ],
       ),
     );

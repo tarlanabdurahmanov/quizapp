@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:quizapp/colors.dart';
+import 'package:quizapp/constants/colors.dart';
 
-class CustomButton extends StatelessWidget {
+class CustomButtonWidget extends StatelessWidget {
   final Widget widget;
   final Color color;
   final Color? borderColor;
   final VoidCallback onPressed;
   final double? radius;
 
-  const CustomButton(
+  const CustomButtonWidget(
       {Key? key,
       required this.widget,
       required this.color,

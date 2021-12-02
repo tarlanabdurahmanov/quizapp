@@ -5,21 +5,25 @@ import 'package:quizapp/constants/size.dart';
 import 'package:quizapp/controllers/question_controller.dart';
 import 'package:quizapp/models/QuestionOption.dart';
 import 'package:quizapp/screens/home_screen.dart';
+import 'package:quizapp/widgets/custom_button.dart';
+import 'package:quizapp/widgets/lottie_loading.dart';
 import 'package:quizapp/widgets/question_option_button.dart';
-import '../colors.dart';
+import '../constants/colors.dart';
 import '../widgets/linear_progress_widget.dart';
 
+// ignore: must_be_immutable
 class QuestionScreen extends StatelessWidget {
   final int categoryId;
   QuestionScreen({Key? key, required this.categoryId}) : super(key: key);
 
   final _questionController = Get.put(QuestionController());
-
+  var height = 0.0;
   @override
   Widget build(BuildContext context) {
     _questionController.getQuestions(categoryId);
     return WillPopScope(
       onWillPop: () async {
+        // print("Click event");
         showDialog(
           context: context,
           builder: (context) => new AlertDialog(
@@ -47,6 +51,7 @@ class QuestionScreen extends StatelessWidget {
         appBar: AppBar(
           elevation: 0,
           backgroundColor: primaryColor,
+          automaticallyImplyLeading: false,
           title: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -70,10 +75,15 @@ class QuestionScreen extends StatelessWidget {
         ),
         body: LayoutBuilder(
           builder: (BuildContext context, BoxConstraints constraints) {
+            _questionController.changeHeightFunc(constraints.maxHeight * 0.35);
             return ConstrainedBox(
               constraints: BoxConstraints(minHeight: constraints.maxHeight),
               child: IntrinsicHeight(
-                child: _questionSection(context, constraints),
+                child: Obx(
+                  () => _questionController.isLoading.value
+                      ? LottieLoading()
+                      : _questionSection(),
+                ),
               ),
             );
           },
@@ -82,23 +92,28 @@ class QuestionScreen extends StatelessWidget {
     );
   }
 
-  Stack _questionSection(BuildContext context, BoxConstraints constraints) {
+  Stack _questionSection() {
     return Stack(
       children: [
-        Container(
-          height: constraints.maxHeight * 0.35,
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              colors: [
-                primaryColor,
-                primarySecondColor,
-              ],
+        Obx(
+          () => AnimatedContainer(
+            height: _questionController.changeHeight.value,
+            clipBehavior: Clip.antiAlias,
+            curve: Curves.fastLinearToSlowEaseIn,
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [
+                  primaryColor,
+                  primarySecondColor,
+                ],
+              ),
+              borderRadius: BorderRadius.vertical(
+                bottom: Radius.elliptical(600, 100),
+              ),
             ),
-            borderRadius: BorderRadius.vertical(
-              bottom: Radius.elliptical(600, 100),
-            ),
+            duration: Duration(milliseconds: 400),
           ),
         ),
         Positioned(
@@ -108,90 +123,110 @@ class QuestionScreen extends StatelessWidget {
           right: 0,
           child: SingleChildScrollView(
             child: GetBuilder<QuestionController>(
-              builder: (controller) => controller.isLoading.value
-                  ? Center(
-                      child: CircularProgressIndicator(color: Colors.white))
-                  : Column(
-                      children: [
-                        _progressSection(),
-                        SizedBox(height: 20),
-                        Container(
-                          width: double.infinity,
-                          margin: EdgeInsets.symmetric(horizontal: 15),
-                          padding: EdgeInsets.symmetric(
-                              horizontal: 20, vertical: 20),
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(15),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.grey.withOpacity(0.4),
-                                blurRadius: 10,
-                                offset: Offset(0, 1),
-                              )
-                            ],
-                          ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              if (controller.question.image != null)
-                                Center(
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                      boxShadow: [
-                                        BoxShadow(
-                                          color: Colors.grey.withOpacity(0.5),
-                                          spreadRadius: 5,
-                                          blurRadius: 7,
-                                          offset: Offset(0, 3),
-                                        ),
-                                      ],
-                                    ),
-                                    child: Image.network(
-                                      controller.question.image,
-                                      fit: BoxFit.contain,
-                                      height: 150,
+                builder: (controller) => controller.question != null
+                    ? Column(
+                        children: [
+                          _progressSection(),
+                          SizedBox(height: 20),
+                          Container(
+                            width: double.infinity,
+                            margin: EdgeInsets.symmetric(horizontal: 15),
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 20, vertical: 20),
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(15),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.grey.withOpacity(0.4),
+                                  blurRadius: 10,
+                                  offset: Offset(0, 1),
+                                )
+                              ],
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                if (controller.question!.image != null)
+                                  Center(
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        boxShadow: [
+                                          BoxShadow(
+                                            color: Colors.grey.withOpacity(0.5),
+                                            spreadRadius: 5,
+                                            blurRadius: 7,
+                                            offset: Offset(0, 3),
+                                          ),
+                                        ],
+                                      ),
+                                      child: Image.network(
+                                        controller.question!.image,
+                                        fit: BoxFit.contain,
+                                        height: 150,
+                                      ),
                                     ),
                                   ),
+                                if (controller.question!.music != null)
+                                  _audioQuestion(controller.question!.music),
+                                if (controller.question!.image != null ||
+                                    controller.question!.music != null)
+                                  sizedBoxHeight(height: 15),
+                                Text(
+                                  controller.question!.question,
+                                  style: poppinsTextStyle(
+                                    fontWeight: FontWeight.w600,
+                                  ),
                                 ),
-                              if (controller.question.music != null)
-                                _audioQuestion(controller.question.music),
-                              if (controller.question.image != null ||
-                                  controller.question.music != null)
-                                sizedBoxHeight(height: 15),
-                              Text(
-                                controller.question.question,
-                                style: poppinsTextStyle(
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
+                          SizedBox(height: 30),
+                          ...controller.answers.map((element) {
+                            return QuestionOptionRadioButton(
+                              option: QuestionOption(
+                                  id: element.id, text: element.answer),
+                              isSelect: _questionController.answerId.value ==
+                                  element.id,
+                              isWrong:
+                                  _questionController.wrongAnswerId.value ==
+                                      element.id,
+                              selected: () {
+                                if (_questionController.wrongAnswerId.value ==
+                                        0 &&
+                                    !_questionController
+                                        .isQuestionLoading.value) {
+                                  _questionController.checkAns(element.id);
+                                }
+                              },
+                            );
+                          })
+                        ],
+                      )
+                    : Center(
+                        child: Column(
+                          children: [
+                            Text(
+                              "Sual tapılmadı",
+                              style: propmtTextStyle(
+                                color: Colors.white,
+                                fontSize: 20,
+                              ),
+                            ),
+                            sizedBoxHeight(height: 20),
+                            CustomButton(
+                              text: "Ana səhifə",
+                              onPressed: () {
+                                Get.offAll(() => HomeScreen());
+                              },
+                            ),
+                          ],
                         ),
-                        SizedBox(height: 30),
-                        ...controller.answers.map((element) {
-                          return QuestionOptionRadioButton(
-                            option: QuestionOption(
-                                id: element.id, text: element.answer),
-                            isSelect: _questionController.answerId.value ==
-                                element.id,
-                            isWrong: _questionController.wrongAnswerId.value ==
-                                element.id,
-                            selected: () {
-                              if (_questionController.wrongAnswerId.value ==
-                                      0 &&
-                                  !_questionController
-                                      .isQuestionLoading.value) {
-                                _questionController.checkAns(element.id);
-                              }
-                            },
-                          );
-                        })
-                      ],
-                    ),
-            ),
+                      )),
           ),
-        )
+        ),
+        if (_questionController.isLoading.value)
+          Positioned(child: Center(child: LottieLoading()))
       ],
     );
   }

@@ -1,10 +1,14 @@
 import 'dart:async';
+import 'dart:math';
 
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:quizapp/constants/colors.dart';
 import 'package:quizapp/constants/fonts.dart';
+import 'package:quizapp/controllers/home_controller.dart';
 import 'package:quizapp/core/controller/base_controller.dart';
 import 'package:quizapp/core/init/network/network_manager.dart';
 import 'package:quizapp/core/models/error_model.dart';
@@ -13,6 +17,7 @@ import 'package:quizapp/models/TimeOverResponseModel.dart';
 import 'package:quizapp/screens/home_screen.dart';
 import 'package:quizapp/service/NetworkService.dart';
 import 'package:quizapp/service/INetworkService.dart';
+import 'package:confetti/confetti.dart';
 
 class QuestionController extends BaseController
     with SingleGetTickerProviderMixin {
@@ -26,6 +31,8 @@ class QuestionController extends BaseController
   Animation? get animation => this._animation;
   AnimationController? get animationController => this._animationController;
 
+  ConfettiController? confettiController;
+
   AudioPlayer audioPlayer = AudioPlayer();
   Duration duration = new Duration();
   Duration position = new Duration();
@@ -34,13 +41,14 @@ class QuestionController extends BaseController
   RxInt answerId = 0.obs;
   RxInt wrongAnswerId = 0.obs;
   RxInt changeScore = 0.obs;
+  RxDouble changeHeight = 0.0.obs;
 
-  late Question question;
+  Question? question;
   var answers = <QuestionAnswer>[].obs;
   var questionIndex = 0.obs;
   var examId = 0.obs;
   var score = 0.obs;
-  var questionPosition = 1.obs;
+  var type = 0.obs;
   var isQuestionLoading = false.obs;
   var errorMessage = "".obs;
 
@@ -58,17 +66,21 @@ class QuestionController extends BaseController
 
   Future<void> getQuestions(int categoryId) async {
     changeLoading();
-    final response = await _service.getQuestion(
-      categoryId: categoryId,
-    );
-    if (response is QuestionResponseModel) {
-      question = response.question;
-      answers.value = response.answers;
-      print(question);
-    } else if (response is ErrorModel) {
-      print("Error -> ${response.error}");
+    try {
+      final response = await _service.getQuestion(
+        categoryId: categoryId,
+      );
+      if (response is QuestionResponseModel) {
+        question = response.question;
+        answers.value = response.answers;
+        print(question);
+      } else if (response is ErrorModel) {
+        print("Error -> ${response.error}");
+      }
+      update();
+    } catch (e) {
+      print("Error -> ${e}");
     }
-    update();
     changeLoading();
   }
 
@@ -86,11 +98,15 @@ class QuestionController extends BaseController
         dynamic error = response.error;
         if (error['message'] != null) {
           wrongAnswerId.value = id;
-          await Future.delayed(Duration(seconds: 1));
-          showSnacbar(message: error['message'].toString());
           errorMessage.value = error['message'].toString();
           score.value = error['common_score'];
-          storage.write("score", score.value);
+          storage.write("score", changeScore.value.toString());
+        }
+        if (error['type'] == 1) {
+          type.value = 1;
+          confettiController =
+              ConfettiController(duration: const Duration(seconds: 40));
+          confettiController!.play();
         }
       }
     }
@@ -100,29 +116,73 @@ class QuestionController extends BaseController
       nextQuestion();
       update();
     } else {
+      showSnacbar(
+        message: errorMessage.value.toString(),
+        color: type.value == 1 ? Colors.green : null,
+        icon: type.value == 1 ? FeatherIcons.check : null,
+      );
+      storage.write("score", score.value);
       Get.dialog(
-        AlertDialog(
-          title: Text(
-            "Nəticə : ${score.value * 10} XP",
-            style: poppinsTextStyle(
-              fontSize: 17,
-              fontWeight: FontWeight.w600,
+        WillPopScope(
+          onWillPop: () async {
+            Get.delete<HomeController>();
+            Get.offAll(() => HomeScreen());
+            return false;
+          },
+          child: AlertDialog(
+            title: Text(
+              "Nəticə : ${score.value * 10} XP",
+              style: poppinsTextStyle(
+                fontSize: 17,
+                fontWeight: FontWeight.w600,
+              ),
             ),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  errorMessage.value,
+                  style: poppinsTextStyle(
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                if (type.value == 1)
+                  Align(
+                    alignment: Alignment.center,
+                    child: ConfettiWidget(
+                      confettiController: confettiController!,
+                      blastDirectionality: BlastDirectionality.explosive,
+                      shouldLoop: true,
+                      blastDirection: pi,
+                      particleDrag: 0.05,
+                      emissionFrequency: 0.05,
+                      numberOfParticles: 15,
+                      gravity: 0.05,
+                      colors: const [
+                        Colors.green,
+                        Colors.blue,
+                        Colors.pink,
+                        Colors.orange,
+                        Colors.purple,
+                        primaryColor,
+                        primarySecondColor,
+                      ], // manually specify the colors to be used
+                      createParticlePath:
+                          drawStar, // define a custom shape/path.
+                    ),
+                  ),
+              ],
+            ),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Get.delete<HomeController>();
+                  Get.offAll(() => HomeScreen());
+                },
+                child: Text("Ana Səhifə"),
+              ),
+            ],
           ),
-          content: Text(
-            errorMessage.value,
-            style: poppinsTextStyle(
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Get.offAll(() => HomeScreen());
-              },
-              child: Text("Ana Səhifə"),
-            ),
-          ],
         ),
         barrierDismissible: false,
       );
@@ -190,6 +250,7 @@ class QuestionController extends BaseController
           actions: [
             TextButton(
               onPressed: () {
+                Get.delete<HomeController>();
                 Get.offAll(() => HomeScreen());
               },
               child: Text("Ana Səhifə"),
@@ -201,10 +262,42 @@ class QuestionController extends BaseController
     }
   }
 
+  changeHeightFunc(double height) async {
+    await Future.delayed(Duration(milliseconds: 1000));
+    changeHeight.value = height;
+  }
+
+  Path drawStar(Size size) {
+    // Method to convert degree to radians
+    double degToRad(double deg) => deg * (pi / 180.0);
+
+    const numberOfPoints = 5;
+    final halfWidth = size.width / 2;
+    final externalRadius = halfWidth;
+    final internalRadius = halfWidth / 2.5;
+    final degreesPerStep = degToRad(360 / numberOfPoints);
+    final halfDegreesPerStep = degreesPerStep / 2;
+    final path = Path();
+    final fullAngle = degToRad(360);
+    path.moveTo(size.width, halfWidth);
+
+    for (double step = 0; step < fullAngle; step += degreesPerStep) {
+      path.lineTo(halfWidth + externalRadius * cos(step),
+          halfWidth + externalRadius * sin(step));
+      path.lineTo(halfWidth + internalRadius * cos(step + halfDegreesPerStep),
+          halfWidth + internalRadius * sin(step + halfDegreesPerStep));
+    }
+    path.close();
+    return path;
+  }
+
   @override
   void onClose() {
-    super.onClose();
+    if (type.value == 1) {
+      confettiController!.dispose();
+    }
     audioPlayer.dispose();
     _animationController!.dispose();
+    super.onClose();
   }
 }

@@ -19,7 +19,6 @@ class CategoryController extends BaseController {
   Future<void> getCategories() async {
     changeLoading();
     final response = await _service.getCategories();
-    print(response);
     if (response is CategoryResponseModel) {
       categories.value = response.categories;
     } else if (response is ErrorModel) {
