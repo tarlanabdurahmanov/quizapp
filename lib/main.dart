@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:quizapp/widgets/animation_score.dart';
 import 'package:quizapp/constants/colors.dart';
 import 'package:quizapp/core/bindings/app_binding.dart';
 import 'package:quizapp/screens/home_screen.dart';

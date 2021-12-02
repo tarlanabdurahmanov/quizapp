@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:quizapp/widgets/animation_score.dart';
 import 'package:quizapp/constants/fonts.dart';
 import 'package:quizapp/constants/size.dart';
 import 'package:quizapp/controllers/question_controller.dart';
@@ -49,30 +50,55 @@ class QuestionScreen extends StatelessWidget {
       },
       child: Scaffold(
         appBar: AppBar(
-          elevation: 0,
-          backgroundColor: primaryColor,
-          automaticallyImplyLeading: false,
-          title: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Image.asset(
-                "assets/images/money.png",
-                width: 40,
-              ),
-              SizedBox(width: 10),
-              Obx(
-                () => Text(
-                  "${_questionController.changeScore.value * 10} XP",
-                  style: TextStyle(
-                    fontSize: 17,
-                    color: Color(0xFFfdf04d),
-                    fontWeight: FontWeight.bold,
-                  ),
+            elevation: 0,
+            backgroundColor: primaryColor,
+            automaticallyImplyLeading: false,
+            title: Obx(
+              () => ScaleTransition(
+                scale: Tween(begin: 0.75, end: 1.0).animate(CurvedAnimation(
+                    parent: _questionController.xpController!,
+                    curve: Curves.fastLinearToSlowEaseIn)),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Image.asset(
+                      "assets/images/money.png",
+                      width: 40,
+                    ),
+                    SizedBox(width: 10),
+                    Text(
+                      "${_questionController.changeScore.value * 10} XP",
+                      style: propmtTextStyle(
+                        fontSize: 15,
+                        color: Color(0xFFfdf04d),
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
                 ),
               ),
-            ],
-          ),
-        ),
+            )
+            // title: Row(
+            //   mainAxisAlignment: MainAxisAlignment.center,
+            //   children: [
+            //     Image.asset(
+            //       "assets/images/money.png",
+            //       width: 40,
+            //     ),
+            //     SizedBox(width: 10),
+            //     Obx(
+            //       () => Text(
+            //         "${_questionController.changeScore.value * 10} XP",
+            //         style: TextStyle(
+            //           fontSize: 17,
+            //           color: Color(0xFFfdf04d),
+            //           fontWeight: FontWeight.bold,
+            //         ),
+            //       ),
+            //     ),
+            //   ],
+            // ),
+            ),
         body: LayoutBuilder(
           builder: (BuildContext context, BoxConstraints constraints) {
             _questionController.changeHeightFunc(constraints.maxHeight * 0.35);

@@ -27,6 +27,7 @@ class QuestionController extends BaseController
   INetworkService _service = NetworkService(CoreDio());
 
   AnimationController? _animationController;
+  AnimationController? xpController;
   Animation? _animation;
   Animation? get animation => this._animation;
   AnimationController? get animationController => this._animationController;
@@ -54,6 +55,8 @@ class QuestionController extends BaseController
 
   @override
   void onInit() {
+    xpController = AnimationController(
+        duration: const Duration(milliseconds: 700), vsync: this);
     _animationController =
         AnimationController(duration: Duration(seconds: 60), vsync: this);
     _animation = Tween<double>(begin: 0, end: 1).animate(_animationController!)
@@ -94,6 +97,7 @@ class QuestionController extends BaseController
         answers.value = response.answers;
         answerId.value = 0;
         ++changeScore.value;
+        xpAnimation();
       } else if (response is ErrorModel) {
         dynamic error = response.error;
         if (error['message'] != null) {
@@ -103,6 +107,8 @@ class QuestionController extends BaseController
           storage.write("score", changeScore.value.toString());
         }
         if (error['type'] == 1) {
+          ++changeScore.value;
+          xpAnimation();
           type.value = 1;
           confettiController =
               ConfettiController(duration: const Duration(seconds: 40));
@@ -156,7 +162,7 @@ class QuestionController extends BaseController
                       blastDirection: pi,
                       particleDrag: 0.05,
                       emissionFrequency: 0.05,
-                      numberOfParticles: 15,
+                      numberOfParticles: 10,
                       gravity: 0.05,
                       colors: const [
                         Colors.green,
@@ -164,11 +170,8 @@ class QuestionController extends BaseController
                         Colors.pink,
                         Colors.orange,
                         Colors.purple,
-                        primaryColor,
-                        primarySecondColor,
-                      ], // manually specify the colors to be used
-                      createParticlePath:
-                          drawStar, // define a custom shape/path.
+                      ],
+                      createParticlePath: drawStar,
                     ),
                   ),
               ],
@@ -291,6 +294,13 @@ class QuestionController extends BaseController
     return path;
   }
 
+  xpAnimation() async {
+    xpController!.reset();
+    xpController!.forward();
+    await Future.delayed(Duration(milliseconds: 500));
+    xpController!.reverse();
+  }
+
   @override
   void onClose() {
     if (type.value == 1) {
@@ -298,6 +308,7 @@ class QuestionController extends BaseController
     }
     audioPlayer.dispose();
     _animationController!.dispose();
+    xpController!.dispose();
     super.onClose();
   }
 }

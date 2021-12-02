@@ -78,6 +78,7 @@ class CategoryScreen extends StatelessWidget {
                         padding: const EdgeInsets.symmetric(vertical: 5),
                         child: _button(
                           text: element.categoryName,
+                          image: element.image,
                           onPressed: () {
                             Get.to(
                                 () => QuestionScreen(categoryId: element.id));
@@ -93,7 +94,7 @@ class CategoryScreen extends StatelessWidget {
   }
 
   ElevatedButton _button(
-      {required String text, required VoidCallback onPressed}) {
+      {required String text, String? image, required VoidCallback onPressed}) {
     return ElevatedButton(
       onPressed: onPressed,
       style: ElevatedButton.styleFrom(
@@ -103,13 +104,28 @@ class CategoryScreen extends StatelessWidget {
           borderRadius: BorderRadius.circular(50),
         ),
       ),
-      child: Text(
-        text,
-        style: propmtTextStyle(
-          color: Color(0xFF6b71df),
-          fontWeight: FontWeight.w600,
-          fontSize: 18,
-        ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          SizedBox(
+            width: 45,
+            height: 45,
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(50),
+              child: Image.network(image!),
+            ),
+          ),
+          Text(
+            text,
+            style: propmtTextStyle(
+              color: Color(0xFF6b71df),
+              fontWeight: FontWeight.w600,
+              fontSize: 18,
+            ),
+          ),
+          sizedBoxWidth(width: 40),
+        ],
       ),
     );
   }

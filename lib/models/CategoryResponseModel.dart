@@ -20,19 +20,23 @@ class Category {
   Category({
     required this.id,
     required this.categoryName,
+    this.image,
   });
 
   int id;
   String categoryName;
+  String? image;
   dynamic deletedAt;
 
   factory Category.fromJson(Map<String, dynamic> json) => Category(
         id: json["id"],
         categoryName: json["category_name"],
+        image: json["image"],
       );
 
   Map<String, dynamic> toJson() => {
         "id": id,
         "category_name": categoryName,
+        "image": image,
       };
 }

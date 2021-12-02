@@ -21,8 +21,7 @@ class CategoryController extends BaseController {
     final response = await _service.getCategories();
     if (response is CategoryResponseModel) {
       categories.value = response.categories;
-    } else if (response is ErrorModel) {
-    }
+    } else if (response is ErrorModel) {}
     changeLoading();
   }
 }
