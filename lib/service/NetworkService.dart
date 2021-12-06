@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:quizapp/models/CategoryResponseModel.dart';
 import 'package:quizapp/models/LoginRequestModel.dart';
 import 'package:quizapp/models/AuthResponseModel.dart';
+import 'package:quizapp/models/MessageRequestModel.dart';
 import 'package:quizapp/models/QuestionResponseModel.dart';
 import 'package:quizapp/models/RatingResponseModel.dart';
 import 'package:quizapp/models/RegisterRequestModel.dart';
@@ -107,7 +108,16 @@ class NetworkService extends INetworkService {
   @override
   Future editProfile(data) async {
     final response = await coreDio.post(editProfilePath, data);
-    print("Response -> $response");
+    if (response.statusCode == HttpStatus.ok) {
+      return response.data['success'];
+    } else {
+      return ErrorModel.fromJson(response.data);
+    }
+  }
+
+  @override
+  Future sendMessage(MessageRequestModel model) async {
+    final response = await coreDio.post(sendMessagePath, model);
     if (response.statusCode == HttpStatus.ok) {
       return response.data['success'];
     } else {

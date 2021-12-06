@@ -1,3 +1,5 @@
+import 'package:quizapp/database/database_model.dart';
+
 class CategoryResponseModel {
   CategoryResponseModel({
     required this.categories,
@@ -16,7 +18,7 @@ class CategoryResponseModel {
       };
 }
 
-class Category {
+class Category extends DatabaseModel {
   Category({
     required this.id,
     required this.categoryName,
@@ -39,4 +41,9 @@ class Category {
         "category_name": categoryName,
         "image": image,
       };
+
+  @override
+  fromJson(Map<String, dynamic> json) {
+    return Category.fromJson(json);
+  }
 }

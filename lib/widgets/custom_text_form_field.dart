@@ -6,7 +6,7 @@ class CustomTextFormField extends StatelessWidget {
   final String? errorText;
   final Color fillColor;
   final Color borderColor;
-  final IconData prefixIcon;
+  final IconData? prefixIcon;
   final Widget? suffixIcon;
   final bool obscureText;
   final Function(String)? onChanged;
@@ -45,7 +45,9 @@ class CustomTextFormField extends StatelessWidget {
         filled: true,
         fillColor: fillColor,
         hintText: hintText,
-        contentPadding: EdgeInsets.all(0),
+        contentPadding: prefixIcon != null
+            ? EdgeInsets.all(0)
+            : EdgeInsets.symmetric(horizontal: 15),
         hintStyle: propmtTextStyle(color: Color(0xFF9ba5b0)),
         border: OutlineInputBorder(
           borderSide: BorderSide(width: 1, color: borderColor),
@@ -63,7 +65,9 @@ class CustomTextFormField extends StatelessWidget {
           borderSide: BorderSide(width: 1, color: borderColor),
           borderRadius: BorderRadius.circular(10),
         ),
-        prefixIcon: Icon(prefixIcon, color: Color(0xFF9ba5b0)),
+        prefixIcon: prefixIcon != null
+            ? Icon(prefixIcon, color: Color(0xFF9ba5b0))
+            : null,
         suffixIcon: suffixIcon,
       ),
     );

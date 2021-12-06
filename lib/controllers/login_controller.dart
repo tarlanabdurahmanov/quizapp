@@ -63,7 +63,6 @@ class LoginController extends BaseController {
 
   @override
   void onClose() {
-    print("onClose");
     username.clear();
     password.clear();
     super.onClose();

@@ -1,9 +1,11 @@
 import 'package:quizapp/models/LoginRequestModel.dart';
+import 'package:quizapp/models/MessageRequestModel.dart';
 import 'package:quizapp/models/RegisterRequestModel.dart';
 
 abstract class INetworkService {
   final String loginPath = INetworkServicePath.LOGIN.rawValue;
   final String registerPath = INetworkServicePath.REGISTER.rawValue;
+  final String sendMessagePath = INetworkServicePath.SEND_MESSAGE.rawValue;
   final String getQuestionPath = INetworkServicePath.GET_QUESTION.rawValue;
   final String userAnswerPath = INetworkServicePath.USER_ANSWER.rawValue;
   final String timeOverPath = INetworkServicePath.TIME_OVER.rawValue;
@@ -15,6 +17,7 @@ abstract class INetworkService {
 
   Future<dynamic> login(LoginRequestModel model);
   Future<dynamic> register(RegisterRequestModel model);
+  Future<dynamic> sendMessage(MessageRequestModel model);
   Future<dynamic> getQuestion({int categoryId});
   Future<dynamic> userAnswer({int answerId});
   Future<dynamic> timeOver();
@@ -34,6 +37,7 @@ enum INetworkServicePath {
   RATING,
   USER_INFORMATION,
   EDIT_PROFILE,
+  SEND_MESSAGE,
 }
 
 extension INetworkServicePathExtension on INetworkServicePath {
@@ -43,6 +47,8 @@ extension INetworkServicePathExtension on INetworkServicePath {
         return '/login';
       case INetworkServicePath.REGISTER:
         return '/register';
+      case INetworkServicePath.SEND_MESSAGE:
+        return '/send-message';
       case INetworkServicePath.GET_QUESTION:
         return '/start-game';
       case INetworkServicePath.USER_ANSWER:

@@ -6,6 +6,7 @@ import 'package:quizapp/constants/fonts.dart';
 import 'package:quizapp/constants/size.dart';
 import 'package:quizapp/constants/strings.dart';
 import 'package:quizapp/controllers/leaderboard_controller.dart';
+import 'package:lottie/lottie.dart';
 
 class LeaderBoardScreen extends StatelessWidget {
   final _leaderBoardController = Get.put(LeaderboardController());
@@ -127,7 +128,7 @@ class LeaderBoardScreen extends StatelessWidget {
                                 );
                               },
                             )
-                          : Text("Məlumat tapılmadı")),
+                          : Center(child: Lottie.asset(noDataLottiePath))),
                 ),
               );
             },

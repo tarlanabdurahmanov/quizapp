@@ -8,11 +8,15 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:quizapp/constants/colors.dart';
 import 'package:quizapp/core/controller/base_controller.dart';
+import 'package:quizapp/core/init/network/network_manager.dart';
 import 'package:quizapp/screens/home_screen.dart';
+import 'package:quizapp/service/INetworkService.dart';
+import 'package:quizapp/service/NetworkService.dart';
 import 'package:quizapp/widgets/custom_button_widget.dart';
 import 'package:quizapp/widgets/no_internet.dart';
 
 class NetworkController extends BaseController {
+  INetworkService _service = NetworkService(CoreDio());
   // ignore: cancel_subscriptions, unused_field
   StreamSubscription<ConnectivityResult>? _connectivityStreamSubscription;
   final Connectivity _connectivity = Connectivity();
@@ -42,13 +46,14 @@ class NetworkController extends BaseController {
   _updateConnectionStatus(ConnectivityResult? result, bool check) async {
     if (check && ConnectivityResult.none == result) {
       connection.value = false;
-
       Get.offAll(() => NoInternetScreen());
       showSnacbar(
           message: "İnternet bağlantısını yoxlayın", animationDuration: 3);
+      await _service.timeOver();
     } else if (ConnectivityResult.none == result && !check) {
       showSnacbar(
           message: "İnternet bağlantısını yoxlayın", animationDuration: 3);
+      await _service.timeOver();
       Get.dialog(
         AlertDialog(
           title: Text("İnternet bağlantısını yoxlayın",
@@ -62,8 +67,6 @@ class NetworkController extends BaseController {
                 onPressed: () {
                   if (connection.value) {
                     Get.offAll(() => HomeScreen());
-                  } else {
-                    Get.back();
                   }
                 },
               ),

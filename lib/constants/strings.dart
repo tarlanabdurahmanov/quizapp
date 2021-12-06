@@ -7,6 +7,7 @@ const userDefaultPath = "assets/images/user.jpg";
 
 const googleLogoPath = "assets/images/google.png";
 const noDataPath = "assets/svg/no_data.svg";
+const noDataLottiePath = "assets/lottie/nodata.json";
 const choosePath = "assets/svg/choose1.svg";
 const notFoundPath = "assets/svg/not_found.svg";
 const loadingLottiePath = "assets/lottie/world-turns.json";

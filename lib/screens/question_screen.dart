@@ -11,6 +11,7 @@ import 'package:quizapp/widgets/lottie_loading.dart';
 import 'package:quizapp/widgets/question_option_button.dart';
 import '../constants/colors.dart';
 import '../widgets/linear_progress_widget.dart';
+import 'package:quizapp/constants/strings.dart';
 
 // ignore: must_be_immutable
 class QuestionScreen extends StatelessWidget {

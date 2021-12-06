@@ -1,3 +1,4 @@
+import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -9,7 +10,12 @@ import 'package:quizapp/screens/question_screen.dart';
 import 'package:quizapp/widgets/lottie_loading.dart';
 import '../constants/colors.dart';
 
-class CategoryScreen extends StatelessWidget {
+class CategoryScreen extends StatefulWidget {
+  @override
+  State<CategoryScreen> createState() => _CategoryScreenState();
+}
+
+class _CategoryScreenState extends State<CategoryScreen> {
   final _categoryController = Get.put(CategoryController());
 
   @override
@@ -64,28 +70,35 @@ class CategoryScreen extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  SvgPicture.asset(
-                    choosePath,
-                    height: 200,
-                  ),
-                  sizedBoxHeight(height: 40),
-                  if (_categoryController.isLoading.value)
-                    Center(
-                        child: CircularProgressIndicator(color: Colors.white)),
-                  if (!_categoryController.isLoading.value)
-                    ..._categoryController.categories.map(
-                      (element) => Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 5),
-                        child: _button(
-                          text: element.categoryName,
-                          image: element.image,
-                          onPressed: () {
-                            Get.to(
-                                () => QuestionScreen(categoryId: element.id));
-                          },
+                  // SvgPicture.asset(
+                  //   choosePath,
+                  //   height: 200,
+                  // ),
+                  // sizedBoxHeight(height: 40),
+                  // _categoryController
+                  ListView.builder(
+                    shrinkWrap: true,
+                    physics: NeverScrollableScrollPhysics(),
+                    itemCount: _categoryController.categories.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      return FadeInUp(
+                        duration: Duration(milliseconds: index * 200),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 5),
+                          child: _button(
+                            text: _categoryController
+                                .categories[index].categoryName,
+                            image: _categoryController.categories[index].image,
+                            onPressed: () {
+                              Get.to(() => QuestionScreen(
+                                  categoryId: _categoryController
+                                      .categories[index].id));
+                            },
+                          ),
                         ),
-                      ),
-                    ),
+                      );
+                    },
+                  ),
                 ],
               )
             : LottieLoading(),
