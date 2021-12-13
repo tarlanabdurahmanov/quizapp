@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:quizapp/constants/fonts.dart';
-import 'package:quizapp/constants/colors.dart';
-import 'package:quizapp/core/controller/base_controller.dart';
-import 'package:quizapp/core/init/network/network_manager.dart';
-import 'package:quizapp/core/models/error_model.dart';
-import 'package:quizapp/models/CategoryResponseModel.dart';
-import 'package:quizapp/models/RatingResponseModel.dart';
-import 'package:quizapp/service/INetworkService.dart';
-import 'package:quizapp/service/NetworkService.dart';
-import 'package:quizapp/widgets/custom_outline_button.dart';
-import 'package:quizapp/screens/home_screen.dart';
+import '../constants/fonts.dart';
+import '../constants/colors.dart';
+import '../core/controller/base_controller.dart';
+import '../core/init/network/network_manager.dart';
+import '../core/models/error_model.dart';
+import '../models/CategoryResponseModel.dart';
+import '../models/RatingResponseModel.dart';
+import '../service/INetworkService.dart';
+import '../service/NetworkService.dart';
+import '../widgets/custom_outline_button.dart';
+import '../screens/home_screen.dart';
 
 class LeaderboardController extends BaseController {
   INetworkService _service = NetworkService(CoreDio());

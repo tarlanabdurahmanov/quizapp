@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:quizapp/widgets/animation_score.dart';
-import 'package:quizapp/constants/fonts.dart';
-import 'package:quizapp/constants/size.dart';
-import 'package:quizapp/controllers/question_controller.dart';
-import 'package:quizapp/models/QuestionOption.dart';
-import 'package:quizapp/screens/home_screen.dart';
-import 'package:quizapp/widgets/custom_button.dart';
-import 'package:quizapp/widgets/lottie_loading.dart';
-import 'package:quizapp/widgets/question_option_button.dart';
+import '../widgets/animation_score.dart';
+import '../constants/fonts.dart';
+import '../constants/size.dart';
+import '../controllers/question_controller.dart';
+import '../models/QuestionOption.dart';
+import 'home_screen.dart';
+import '../widgets/custom_button.dart';
+import '../widgets/lottie_loading.dart';
+import '../widgets/question_option_button.dart';
 import '../constants/colors.dart';
 import '../widgets/linear_progress_widget.dart';
-import 'package:quizapp/constants/strings.dart';
+import '../constants/strings.dart';
 
 // ignore: must_be_immutable
 class QuestionScreen extends StatelessWidget {
@@ -103,6 +103,7 @@ class QuestionScreen extends StatelessWidget {
         body: LayoutBuilder(
           builder: (BuildContext context, BoxConstraints constraints) {
             _questionController.changeHeightFunc(constraints.maxHeight * 0.35);
+
             return ConstrainedBox(
               constraints: BoxConstraints(minHeight: constraints.maxHeight),
               child: IntrinsicHeight(
@@ -190,6 +191,30 @@ class QuestionScreen extends StatelessWidget {
                                       child: Image.network(
                                         controller.question!.image,
                                         fit: BoxFit.contain,
+                                        loadingBuilder: (BuildContext context,
+                                            Widget child,
+                                            ImageChunkEvent? loadingProgress) {
+                                          if (loadingProgress == null) {
+                                            _questionController
+                                                .animationController!
+                                                .forward();
+                                            return child;
+                                          } else {
+                                            _questionController
+                                                .animationController!
+                                                .stop();
+                                            return SizedBox(
+                                              height: 150,
+                                              child: Center(
+                                                child: Text(
+                                                  "Yüklənir...",
+                                                  style: poppinsTextStyle(
+                                                      fontSize: 17),
+                                                ),
+                                              ),
+                                            );
+                                          }
+                                        },
                                         height: 150,
                                       ),
                                     ),

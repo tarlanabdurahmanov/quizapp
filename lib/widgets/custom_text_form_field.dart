@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:quizapp/constants/fonts.dart';
+import '../constants/fonts.dart';
 
 class CustomTextFormField extends StatelessWidget {
   final String hintText;

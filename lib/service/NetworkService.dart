@@ -1,15 +1,15 @@
 import 'dart:io';
 
-import 'package:quizapp/models/CategoryResponseModel.dart';
-import 'package:quizapp/models/LoginRequestModel.dart';
-import 'package:quizapp/models/AuthResponseModel.dart';
-import 'package:quizapp/models/MessageRequestModel.dart';
-import 'package:quizapp/models/QuestionResponseModel.dart';
-import 'package:quizapp/models/RatingResponseModel.dart';
-import 'package:quizapp/models/RegisterRequestModel.dart';
-import 'package:quizapp/models/TimeOverResponseModel.dart';
-import 'package:quizapp/models/UserResponseModel.dart';
-import 'package:quizapp/service/INetworkService.dart';
+import '../models/CategoryResponseModel.dart';
+import '../models/LoginRequestModel.dart';
+import '../models/AuthResponseModel.dart';
+import '../models/MessageRequestModel.dart';
+import '../models/QuestionResponseModel.dart';
+import '../models/RatingResponseModel.dart';
+import '../models/RegisterRequestModel.dart';
+import '../models/TimeOverResponseModel.dart';
+import '../models/UserResponseModel.dart';
+import 'INetworkService.dart';
 
 import '../../../../core/init/network/network_manager.dart';
 import '../../core/models/error_model.dart';
@@ -21,7 +21,6 @@ class NetworkService extends INetworkService {
   @override
   Future<dynamic> login(LoginRequestModel model) async {
     final response = await coreDio.post(loginPath, model);
-    print("Response $response");
     if (response.statusCode == HttpStatus.ok) {
       return AuthResponseModel.fromJson(response.data['success']);
     } else {
@@ -43,7 +42,6 @@ class NetworkService extends INetworkService {
   Future getQuestion({int? categoryId}) async {
     final response =
         await coreDio.post(getQuestionPath, {"category_id": categoryId});
-    print("Response $response");
     if (response.statusCode == HttpStatus.ok) {
       return QuestionResponseModel.fromJson(response.data['success']);
     } else {
@@ -87,7 +85,6 @@ class NetworkService extends INetworkService {
     final response = await coreDio.post(ratingPath, {
       "category_id": categoryId,
     });
-    print(response);
     if (response.statusCode == HttpStatus.ok) {
       return RatingResponseModel.fromJson(response.data['success']);
     } else {

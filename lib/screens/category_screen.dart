@@ -2,12 +2,12 @@ import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:quizapp/constants/fonts.dart';
-import 'package:quizapp/constants/size.dart';
-import 'package:quizapp/constants/strings.dart';
-import 'package:quizapp/controllers/category_controller.dart';
-import 'package:quizapp/screens/question_screen.dart';
-import 'package:quizapp/widgets/lottie_loading.dart';
+import '../constants/fonts.dart';
+import '../constants/size.dart';
+import '../constants/strings.dart';
+import '../controllers/category_controller.dart';
+import 'question_screen.dart';
+import '../widgets/lottie_loading.dart';
 import '../constants/colors.dart';
 
 class CategoryScreen extends StatefulWidget {
@@ -118,17 +118,20 @@ class _CategoryScreenState extends State<CategoryScreen> {
         ),
       ),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        mainAxisAlignment: image != null
+            ? MainAxisAlignment.spaceBetween
+            : MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          SizedBox(
-            width: 45,
-            height: 45,
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(50),
-              child: Image.network(image!),
+          if (image != null)
+            SizedBox(
+              width: 45,
+              height: 45,
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(50),
+                child: Image.network(image),
+              ),
             ),
-          ),
           Text(
             text,
             style: propmtTextStyle(
@@ -137,7 +140,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
               fontSize: 18,
             ),
           ),
-          sizedBoxWidth(width: 40),
+          if (image != null) sizedBoxWidth(width: 40),
         ],
       ),
     );

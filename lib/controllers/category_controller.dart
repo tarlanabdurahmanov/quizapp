@@ -1,11 +1,11 @@
 import 'package:get/get.dart';
-import 'package:quizapp/core/controller/base_controller.dart';
-import 'package:quizapp/core/init/network/network_manager.dart';
-import 'package:quizapp/core/models/error_model.dart';
-import 'package:quizapp/database/DatabaseHelper.dart';
-import 'package:quizapp/models/CategoryResponseModel.dart';
-import 'package:quizapp/service/INetworkService.dart';
-import 'package:quizapp/service/NetworkService.dart';
+import '../core/controller/base_controller.dart';
+import '../core/init/network/network_manager.dart';
+import '../core/models/error_model.dart';
+import '../database/DatabaseHelper.dart';
+import '../models/CategoryResponseModel.dart';
+import '../service/INetworkService.dart';
+import '../service/NetworkService.dart';
 
 class CategoryController extends BaseController {
   INetworkService _service = NetworkService(CoreDio());

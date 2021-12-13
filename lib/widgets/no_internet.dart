@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/instance_manager.dart';
-import 'package:quizapp/constants/colors.dart';
-import 'package:quizapp/constants/fonts.dart';
-import 'package:quizapp/constants/size.dart';
-import 'package:quizapp/core/controller/network_controller.dart';
-import 'package:quizapp/widgets/custom_button.dart';
+import '../constants/colors.dart';
+import '../constants/fonts.dart';
+import '../constants/size.dart';
+import '../core/controller/network_controller.dart';
+import 'custom_button.dart';
 
 class NoInternetScreen extends StatelessWidget {
   final _networkController = Get.put(NetworkController());

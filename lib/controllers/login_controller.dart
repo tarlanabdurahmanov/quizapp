@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/state_manager.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:quizapp/core/controller/base_controller.dart';
-import 'package:quizapp/core/models/error_model.dart';
-import 'package:quizapp/models/LoginRequestModel.dart';
-import 'package:quizapp/models/AuthResponseModel.dart';
-import 'package:quizapp/screens/home_screen.dart';
-import 'package:quizapp/service/INetworkService.dart';
-import 'package:quizapp/service/NetworkService.dart';
+import '../core/controller/base_controller.dart';
+import '../core/models/error_model.dart';
+import '../models/LoginRequestModel.dart';
+import '../models/AuthResponseModel.dart';
+import '../screens/home_screen.dart';
+import '../service/INetworkService.dart';
+import '../service/NetworkService.dart';
 import '../core/init/network/network_manager.dart';
 
 class LoginController extends BaseController {

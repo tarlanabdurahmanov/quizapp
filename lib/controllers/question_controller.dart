@@ -6,22 +6,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:quizapp/constants/colors.dart';
-import 'package:quizapp/constants/fonts.dart';
-import 'package:quizapp/controllers/home_controller.dart';
-import 'package:quizapp/core/controller/base_controller.dart';
-import 'package:quizapp/core/init/network/network_manager.dart';
-import 'package:quizapp/core/models/error_model.dart';
-import 'package:quizapp/models/QuestionResponseModel.dart';
-import 'package:quizapp/models/TimeOverResponseModel.dart';
-import 'package:quizapp/screens/home_screen.dart';
-import 'package:quizapp/service/NetworkService.dart';
-import 'package:quizapp/service/INetworkService.dart';
+import 'package:lottie/lottie.dart';
+import '../constants/fonts.dart';
+import 'home_controller.dart';
+import '../core/controller/base_controller.dart';
+import '../core/init/network/network_manager.dart';
+import '../core/models/error_model.dart';
+import '../models/QuestionResponseModel.dart';
+import '../models/TimeOverResponseModel.dart';
+import '../screens/home_screen.dart';
+import '../service/NetworkService.dart';
+import '../service/INetworkService.dart';
 import 'package:confetti/confetti.dart';
 
 class QuestionController extends BaseController
     with SingleGetTickerProviderMixin {
-  // var hiveDB = Hive.openBox("milyoncu");
   var storage = GetStorage();
 
   INetworkService _service = NetworkService(CoreDio());
@@ -76,7 +75,6 @@ class QuestionController extends BaseController
       if (response is QuestionResponseModel) {
         question = response.question;
         answers.value = response.answers;
-        print(question);
       } else if (response is ErrorModel) {
         print("Error -> ${response.error}");
       }
@@ -98,6 +96,7 @@ class QuestionController extends BaseController
         answerId.value = 0;
         ++changeScore.value;
         xpAnimation();
+        Get.dialog(Lottie.asset("assets/lottie/excellent.json"));
       } else if (response is ErrorModel) {
         dynamic error = response.error;
         if (error['message'] != null) {
@@ -105,6 +104,9 @@ class QuestionController extends BaseController
           errorMessage.value = error['message'].toString();
           score.value = error['common_score'];
           storage.write("score", changeScore.value.toString());
+          Get.dialog(
+            Lottie.asset("assets/lottie/cry.json", width: 150, height: 150),
+          );
         }
         if (error['type'] == 1) {
           ++changeScore.value;
@@ -145,12 +147,14 @@ class QuestionController extends BaseController
             ),
             content: Column(
               mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   errorMessage.value,
                   style: poppinsTextStyle(
                     fontWeight: FontWeight.w600,
                   ),
+                  textAlign: TextAlign.start,
                 ),
                 if (type.value == 1)
                   Align(
@@ -233,6 +237,7 @@ class QuestionController extends BaseController
   }
 
   Future<void> whenComplete() async {
+    print("When Complete");
     final response = await _service.timeOver();
     if (response is TimeOverResponseModel) {
       Get.dialog(
@@ -297,8 +302,10 @@ class QuestionController extends BaseController
   xpAnimation() async {
     xpController!.reset();
     xpController!.forward();
-    await Future.delayed(Duration(milliseconds: 500));
+
+    await Future.delayed(Duration(milliseconds: 300));
     xpController!.reverse();
+    Get.back();
   }
 
   @override

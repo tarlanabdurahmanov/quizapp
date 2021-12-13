@@ -1,6 +1,6 @@
-import 'package:quizapp/models/LoginRequestModel.dart';
-import 'package:quizapp/models/MessageRequestModel.dart';
-import 'package:quizapp/models/RegisterRequestModel.dart';
+import '../models/LoginRequestModel.dart';
+import '../models/MessageRequestModel.dart';
+import '../models/RegisterRequestModel.dart';
 
 abstract class INetworkService {
   final String loginPath = INetworkServicePath.LOGIN.rawValue;

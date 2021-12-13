@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
-import 'package:get_storage/get_storage.dart';
 import 'package:get/get.dart';
-import 'package:quizapp/core/controller/base_controller.dart';
-import 'package:quizapp/core/init/network/network_manager.dart';
-import 'package:quizapp/core/models/error_model.dart';
-import 'package:quizapp/models/MessageRequestModel.dart';
-import 'package:quizapp/screens/home_screen.dart';
-import 'package:quizapp/service/INetworkService.dart';
-import 'package:quizapp/service/NetworkService.dart';
+import '../core/controller/base_controller.dart';
+import '../core/init/network/network_manager.dart';
+import '../core/models/error_model.dart';
+import '../models/MessageRequestModel.dart';
+import '../screens/home_screen.dart';
+import '../service/INetworkService.dart';
+import '../service/NetworkService.dart';
 
 class SendMessageController extends BaseController {
   INetworkService _service = NetworkService(CoreDio());

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
-import 'package:quizapp/constants/fonts.dart';
+import '../constants/fonts.dart';
 import '../constants/colors.dart';
 import '../models/QuestionOption.dart';
 

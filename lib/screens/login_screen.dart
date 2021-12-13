@@ -3,15 +3,15 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:get/get.dart';
-import 'package:quizapp/constants/colors.dart';
-import 'package:quizapp/constants/fonts.dart';
-import 'package:quizapp/constants/size.dart';
-import 'package:quizapp/constants/strings.dart';
-import 'package:quizapp/controllers/login_controller.dart';
-import 'package:quizapp/screens/register_screen.dart';
-import 'package:quizapp/widgets/custom_button.dart';
-import 'package:quizapp/widgets/custom_outline_button.dart';
-import 'package:quizapp/widgets/custom_text_form_field.dart';
+import '../constants/colors.dart';
+import '../constants/fonts.dart';
+import '../constants/size.dart';
+import '../constants/strings.dart';
+import '../controllers/login_controller.dart';
+import 'register_screen.dart';
+import '../widgets/custom_button.dart';
+import '../widgets/custom_outline_button.dart';
+import '../widgets/custom_text_form_field.dart';
 
 class LoginScreen extends StatelessWidget {
   final _loginController = Get.put(LoginController());
@@ -187,4 +187,7 @@ class LoginScreen extends StatelessWidget {
       ],
     );
   }
+
+
+
 }

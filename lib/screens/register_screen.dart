@@ -3,14 +3,14 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:get/get.dart';
-import 'package:quizapp/constants/colors.dart';
-import 'package:quizapp/constants/fonts.dart';
-import 'package:quizapp/constants/size.dart';
-import 'package:quizapp/constants/strings.dart';
-import 'package:quizapp/controllers/register_controller.dart';
-import 'package:quizapp/screens/login_screen.dart';
-import 'package:quizapp/widgets/custom_button.dart';
-import 'package:quizapp/widgets/custom_outline_button.dart';
+import '../constants/colors.dart';
+import '../constants/fonts.dart';
+import '../constants/size.dart';
+import '../constants/strings.dart';
+import '../controllers/register_controller.dart';
+import 'login_screen.dart';
+import '../widgets/custom_button.dart';
+import '../widgets/custom_outline_button.dart';
 
 class RegisterScreen extends StatelessWidget {
   final _registerController = Get.put(RegisterController());

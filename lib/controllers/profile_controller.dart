@@ -4,13 +4,13 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
-import 'package:quizapp/controllers/home_controller.dart';
-import 'package:quizapp/core/controller/base_controller.dart';
-import 'package:quizapp/core/init/network/network_manager.dart';
-import 'package:quizapp/core/models/error_model.dart';
-import 'package:quizapp/screens/home_screen.dart';
-import 'package:quizapp/service/INetworkService.dart';
-import 'package:quizapp/service/NetworkService.dart';
+import 'home_controller.dart';
+import '../core/controller/base_controller.dart';
+import '../core/init/network/network_manager.dart';
+import '../core/models/error_model.dart';
+import '../screens/home_screen.dart';
+import '../service/INetworkService.dart';
+import '../service/NetworkService.dart';
 import 'package:dio/dio.dart' as Dio;
 
 class ProfileController extends BaseController {

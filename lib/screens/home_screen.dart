@@ -3,13 +3,13 @@ import 'package:avatar_view/avatar_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:get/get.dart';
-import 'package:quizapp/constants/fonts.dart';
-import 'package:quizapp/constants/strings.dart';
-import 'package:quizapp/controllers/home_controller.dart';
-import 'package:quizapp/screens/category_screen.dart';
-import 'package:quizapp/screens/leaderboard_screen.dart';
-import 'package:quizapp/screens/profile_screen.dart';
-import 'package:quizapp/screens/send_message_screen.dart';
+import '../constants/fonts.dart';
+import '../constants/strings.dart';
+import '../controllers/home_controller.dart';
+import 'category_screen.dart';
+import 'leaderboard_screen.dart';
+import 'profile_screen.dart';
+import 'send_message_screen.dart';
 import '../constants/colors.dart';
 
 class HomeScreen extends StatelessWidget {

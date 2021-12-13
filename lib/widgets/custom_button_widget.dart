@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:quizapp/constants/colors.dart';
+import '../constants/colors.dart';
 
 class CustomButtonWidget extends StatelessWidget {
   final Widget widget;

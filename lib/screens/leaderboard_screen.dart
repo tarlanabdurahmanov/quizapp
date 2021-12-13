@@ -1,11 +1,11 @@
 import 'package:avatar_view/avatar_view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:quizapp/constants/colors.dart';
-import 'package:quizapp/constants/fonts.dart';
-import 'package:quizapp/constants/size.dart';
-import 'package:quizapp/constants/strings.dart';
-import 'package:quizapp/controllers/leaderboard_controller.dart';
+import '../constants/colors.dart';
+import '../constants/fonts.dart';
+import '../constants/size.dart';
+import '../constants/strings.dart';
+import '../controllers/leaderboard_controller.dart';
 import 'package:lottie/lottie.dart';
 
 class LeaderBoardScreen extends StatelessWidget {

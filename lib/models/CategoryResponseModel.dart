@@ -1,4 +1,4 @@
-import 'package:quizapp/database/database_model.dart';
+import '../database/database_model.dart';
 
 class CategoryResponseModel {
   CategoryResponseModel({
